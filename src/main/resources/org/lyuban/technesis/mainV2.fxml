@@ -45,6 +45,7 @@
                   <Cursor fx:constant="DISAPPEAR" />
                </cursor>
             </TextArea>
+            <Label fx:id="noteDelField" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="54.0" prefHeight="35.0" prefWidth="175.0" styleClass="label-info-msg" textFill="RED" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
          </children></AnchorPane>
   </items>
 </SplitPane>

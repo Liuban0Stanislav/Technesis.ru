@@ -1,10 +1,14 @@
 package org.lyuban.technesis.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +27,8 @@ public class MainController {
 
     @FXML
     private URL location;
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private Button addButton;
@@ -46,20 +52,30 @@ public class MainController {
 
     @FXML
     private Label windowHeader;
-    private int selectedNoteIndex;
-    private EditorController editorController = new EditorController();
+
+    @FXML
+    private Label noteDelField;
+    private int selectedNoteIndex = -1;
+
 
 
     @FXML
     void initialize() {
         //Работа кнопки создания новой заявки
         addButton.setOnAction(event -> {
-            createNewNote(event);
+            try {
+                showNewNoteWindow("note_creation_form.fxml", "Technesis: \"Форма создания заявки.\"");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        //Работа кнопки редактирования заявки
+        updateButton.setOnAction(event -> {
+                fillUpdateFields("note_creation_form.fxml", "Technesis: \"Форма создания заявки.\"");
         });
 
-        updateButton.setOnAction(event -> {
-            createNewNote(event);
-            fillFieldsInCreationForm(selectedNoteIndex);
+        deleteButton.setOnAction(event -> {
+            deleteNote(selectedNoteIndex);
         });
 
         //заполняю хранилище примерами заявок
@@ -74,27 +90,50 @@ public class MainController {
     }
 
     /**
-     * Метод открывает окно с формой для создания новой заметки.
-     *
-     * @param event
+     * Метод выводит на экран новое окно из заданого fxlm файла.
+     * В качетве параметров принимает имя FXML файла и его заголовок.
+     * @param fxmlFileName имя файла находящегося в проекте
+     * @param titleName заголовок окна
+     * @return экземпляр fxmlLoader
+     * @throws IOException
      */
-    private void createNewNote(ActionEvent event) {
+    private FXMLLoader showNewNoteWindow(String fxmlFileName,
+                                    String titleName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        Scene scene = new Scene(fxmlLoader.load(), 450, 320);
+        Stage stage = new Stage();
+        stage.setTitle(titleName);
+        stage.setScene(scene);
+        stage.show();
+        return fxmlLoader;
+    }
+
+    /**
+     * Метод заполняет поля формы для редактирования заявки текстом выбранной заявки.
+     * @param fxmlFileName имя файла находящегося в проекте
+     * @param titleName заголовок окна
+     */
+    private void fillUpdateFields(String fxmlFileName,
+                                  String titleName){
+        EditorController controller;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("note_creation_form.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 450, 320);
-            Stage stage = new Stage();
-            stage.setTitle("Technesis: \"Форма создания заявки.\"");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+            controller = showNewNoteWindow(fxmlFileName, titleName).getController();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        String headerText = DataStore.getNoteStore().get(selectedNoteIndex).getHeader();
+        String noteText = DataStore.getNoteStore().get(selectedNoteIndex).getNoteText().toString();
+        controller.setHeader(headerText);
+        controller.setNoteText(noteText);
+
     }
 
     /**
      * Метод выводит заголовки заявкок из хранилища в область {@link ScrollPane}
      */
     private void addNotesToVbox() {
+        //очищаем все элементы VBox
+        panelVBox.getChildren().clear();
         //получаю размер хранилища (количество заявок)
         int size = DataStore.getNoteStore().size();
         int counter = 0;
@@ -131,8 +170,36 @@ public class MainController {
             panelVBox.setSpacing(5);
 
             counter++;
-
         }
+
+    }
+
+    private void deleteNote(int selectedNoteIndex){
+        if (selectedNoteIndex != -1) {
+            DataStore.getNoteStore().remove(selectedNoteIndex);
+            timedMessage(1000, "УДАЛЕНО");
+            windowHeader.setText("");
+            noteCreationTime.setText("");
+            noteText.setText("");
+            this.selectedNoteIndex = -1;
+            System.out.println(DataStore.getNoteStore());
+        }
+
+    }
+
+    private void timedMessage(int millis, String messageText){
+        noteDelField.setText(messageText);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    noteDelField.setText("");
+                });
+                timer.cancel();
+            }
+        }, millis);
     }
 
     /**
@@ -144,6 +211,10 @@ public class MainController {
         windowHeader.setText(getNoteHeader(index));
     }
 
+    /**
+     * Метод выводит текст выбранной завяки в соответсвтующее поле.
+     * @param index индекс заявки в хранилище.
+     */
     private void setNoteText(int index) {
         noteText.setText(getNoteText(index).toString());
     }
@@ -188,13 +259,6 @@ public class MainController {
      */
     private LocalDateTime getNoteTime(int index) {
         return DataStore.getNoteStore().get(index).getDateTime();
-    }
-
-    private void fillFieldsInCreationForm(int index){
-        String noteText = DataStore.getNoteStore().get(selectedNoteIndex).getNoteText().toString();
-        TextField textField = editorController.getHeader();
-        textField.setText(noteText);
-        editorController.setHeader(textField);
     }
 }
 

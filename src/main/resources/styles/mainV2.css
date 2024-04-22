@@ -5,7 +5,8 @@
     -fx-background-radius: 0;
     -fx-font: bold 14px Montserrat;
 }
-.split-pane{
+
+.split-pane {
     -fx-background-color: black;
     -fx-border-width: 3;
 }
@@ -37,6 +38,12 @@
 
 .label {
     -fx-border-color: black;
+}
+
+.label-info-msg {
+    -fx-text-fill: red;
+    -fx-alignment: center;
+    -fx-border-color: white;
 }
 
 .label-creation {

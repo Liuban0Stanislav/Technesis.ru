@@ -125,11 +125,11 @@ public class EditorController {
         return noteText;
     }
 
-    public void setHeader(TextField header) {
-        this.header = header;
+    public void setHeader(String text) {
+        this.header.setText(text);
     }
 
-    public void setNoteText(TextArea noteText) {
-        this.noteText = noteText;
+    public void setNoteText(String noteText) {
+        this.noteText.setText(noteText);
     }
 }
