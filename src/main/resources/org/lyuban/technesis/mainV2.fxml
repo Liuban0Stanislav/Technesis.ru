@@ -22,7 +22,7 @@
                   <Button fx:id="deleteButton" layoutX="66.0" layoutY="10.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" styleClass="buttons" text="-" />
               </items>
             </ToolBar>
-            <ScrollPane hbarPolicy="NEVER" layoutX="-2.0" layoutY="44.0" prefHeight="300.0" prefWidth="175.0" styleClass="slider" stylesheets="@../../../styles/mainV2.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="45.0">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="-2.0" layoutY="44.0" prefHeight="300.0" prefWidth="175.0" styleClass="slider" stylesheets="@../../../styles/mainV2.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="45.0">
                <content>
                   <VBox fx:id="panelVBox" alignment="TOP_CENTER" prefHeight="277.0" prefWidth="130.0" />
                </content>

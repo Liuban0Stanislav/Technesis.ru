@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.lyuban.technesis.DataBaceConnection.DataStore;
 import org.lyuban.technesis.HelloApplication;
 
@@ -187,19 +189,18 @@ public class MainController {
 
     }
 
+
     private void timedMessage(int millis, String messageText){
+        //устанавливаем прозрачность 100%
+        noteDelField.setOpacity(1);
+        //устанавливаем текст
         noteDelField.setText(messageText);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    noteDelField.setText("");
-                });
-                timer.cancel();
-            }
-        }, millis);
+        //добавляем анимацию затухания
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), noteDelField);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.play();
     }
 
     /**
