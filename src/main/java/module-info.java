@@ -10,4 +10,6 @@ module org.lyuban.technesis {
     opens org.lyuban.technesis.DataBaceConnection to javafx.fxml;
     exports org.lyuban.technesis.controllers;
     opens org.lyuban.technesis.controllers to javafx.fxml;
+    exports org.lyuban.technesis.service;
+    opens org.lyuban.technesis.service to javafx.fxml;
 }

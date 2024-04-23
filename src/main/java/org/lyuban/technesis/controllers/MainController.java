@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.lyuban.technesis.DataBaceConnection.DataStore;
 import org.lyuban.technesis.HelloApplication;
+import org.lyuban.technesis.service.Service;
 
 public class MainController {
 
@@ -73,10 +75,18 @@ public class MainController {
         });
         //Работа кнопки редактирования заявки
         updateButton.setOnAction(event -> {
-                fillUpdateFields("note_creation_form.fxml", "Technesis: \"Форма создания заявки.\"");
+            if (selectedNoteIndex == -1) {
+                Service.timedMessage(noteDelField,2, "ни чего не выбрано");
+                return;
+            }
+            fillUpdateFields("note_creation_form.fxml", "Technesis: \"Форма создания заявки.\"");
         });
-
+        //Работа книпки удаления заявки
         deleteButton.setOnAction(event -> {
+            if (selectedNoteIndex == -1){
+                Service.timedMessage(noteDelField,2, "ни чего не выбрано");
+                return;
+            }
             deleteNote(selectedNoteIndex);
         });
 
@@ -173,13 +183,16 @@ public class MainController {
 
             counter++;
         }
-
     }
 
+    /**
+     * Метод удаляет заметку из хранилища.
+     * @param selectedNoteIndex индекс элемента.
+     */
     private void deleteNote(int selectedNoteIndex){
         if (selectedNoteIndex != -1) {
             DataStore.getNoteStore().remove(selectedNoteIndex);
-            timedMessage(1000, "УДАЛЕНО");
+            Service.timedMessage(noteDelField,1000, "УДАЛЕНО");
             windowHeader.setText("");
             noteCreationTime.setText("");
             noteText.setText("");
@@ -189,19 +202,22 @@ public class MainController {
 
     }
 
-
-    private void timedMessage(int millis, String messageText){
-        //устанавливаем прозрачность 100%
-        noteDelField.setOpacity(1);
-        //устанавливаем текст
-        noteDelField.setText(messageText);
-
-        //добавляем анимацию затухания
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), noteDelField);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.play();
-    }
+//    /**
+//     * Метод заставляет сообщение появиться и потом плавно затухать в течение определенного времени.
+//     * @param millis время затухания
+//     * @param messageText текст сообщения
+//     */
+//    private void timedMessage(Labeled label, int millis, String messageText){
+//        //устанавливаем прозрачность 100%
+//        label.setOpacity(1);
+//        //устанавливаем текст
+//        label.setText(messageText);
+//        //добавляем анимацию затухания
+//        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), label);
+//        fadeOut.setFromValue(1.0);
+//        fadeOut.setToValue(0.0);
+//        fadeOut.play();
+//    }
 
     /**
      * Метод устанавливает заголовок заметки в соответствующее поле.
