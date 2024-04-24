@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" stylesheets="@../../../styles/mainV2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lyuban.technesis.controllers.MainController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <ToolBar layoutY="14.0" prefHeight="44.0" prefWidth="175.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <Button fx:id="addButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" styleClass="buttons" stylesheets="@../../../styles/mainV2.css" text="+" />
+                  <Button fx:id="updateButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="75.0" styleClass="buttons" stylesheets="@../../../styles/mainV2.css" text=". . ." />
+                  <Button fx:id="deleteButton" layoutX="66.0" layoutY="10.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="35.0" styleClass="buttons" text="-" />
+              </items>
+            </ToolBar>
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="-2.0" layoutY="44.0" prefHeight="300.0" prefWidth="175.0" styleClass="slider" stylesheets="@../../../styles/mainV2.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="45.0">
+               <content>
+                  <VBox fx:id="panelVBox" alignment="TOP_CENTER" prefHeight="277.0" prefWidth="130.0" />
+               </content>
+            </ScrollPane>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Label fx:id="noteCreationTime" layoutX="14.0" layoutY="52.0" prefHeight="35.0" prefWidth="200.0" text="Время создания" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="50.0">
+               <padding>
+                  <Insets left="8.0" right="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="windowHeader" layoutY="7.0" prefHeight="35.0" prefWidth="200.0" text="Заголовок" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <padding>
+                  <Insets left="8.0" right="8.0" />
+               </padding>
+            </Label>
+            <TextArea fx:id="noteText" editable="false" prefHeight="200.0" prefWidth="200.0" text="Текст заявки" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
+               <cursor>
+                  <Cursor fx:constant="DISAPPEAR" />
+               </cursor>
+            </TextArea>
+            <Label fx:id="noteDelField" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="54.0" prefHeight="35.0" prefWidth="175.0" styleClass="label-info-msg" textFill="RED" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+         </children></AnchorPane>
+  </items>
+</SplitPane>

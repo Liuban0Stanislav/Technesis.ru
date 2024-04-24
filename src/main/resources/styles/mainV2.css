@@ -1,0 +1,75 @@
+* {
+    -fx-background-color: white;
+    -fx-border-width: 3;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-font: bold 14px Montserrat;
+}
+
+.split-pane {
+    -fx-background-color: black;
+    -fx-border-width: 3;
+}
+
+.elements:focused {
+    -fx-border-color: red;
+    -fx-border-width: 2;
+}
+
+.split-pane {
+    -fx-background-color: white;
+}
+
+.buttons {
+    -fx-border-color: black;
+}
+
+.buttons:pressed {
+    -fx-background-color: #c5c5c5;
+}
+
+.textArea {
+    -fx-border-color: white;
+}
+
+.scroll-pane {
+    -fx-border-color: black;
+}
+
+.label {
+    -fx-border-color: black;
+}
+
+.label-info-msg {
+    -fx-text-fill: red;
+    -fx-alignment: center;
+    -fx-border-color: white;
+}
+
+.label-creation {
+    -fx-border-color: white;
+}
+
+.text-field {
+    -fx-border-color: black;
+}
+
+.add_edit_button:pressed {
+    -fx-background-color: #c5c5c5;
+}
+
+.noteButton {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}
+
+.noteButton:pressed {
+    -fx-background-color: #c5c5c5;
+}
+
+.noteButton:focused {
+    -fx-border-color: red;
+    -fx-border-width: 3;
+}
+
