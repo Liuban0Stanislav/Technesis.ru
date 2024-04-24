@@ -5,6 +5,8 @@ import javafx.scene.control.Labeled;
 import javafx.util.Duration;
 
 public class Service {
+
+
     /**
      * Метод заставляет сообщение появиться и потом плавно затухать в течение определенного времени.
      * @param millis время затухания

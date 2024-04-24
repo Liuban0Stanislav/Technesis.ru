@@ -1,11 +1,16 @@
 package org.lyuban.technesis.controllers;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -13,6 +18,7 @@ import javafx.scene.control.TextField;
 import org.lyuban.technesis.DataBaceConnection.DataStore;
 import org.lyuban.technesis.models.Note;
 import javafx.stage.Stage;
+import org.lyuban.technesis.service.Service;
 
 public class EditorController {
 
@@ -39,15 +45,24 @@ public class EditorController {
 
     @FXML
     private Button okButn;
+    private MainController mainController;
+
+    public void setOkButtonListener(MainController mainController){
+        this.mainController = mainController;
+    }
 
     @FXML
     void initialize() {
+        ///получаем текущее время
         extractCurrentTime();
+
+        //Работа кнопки "ок"
         okButn.setOnAction(event -> {
             newNoteCreate();
             System.out.println("Содержание хранилища:\n" + DataStore.getNoteStore());
         });
 
+        //Работа кнопки "Отмена"
         canselButn.setOnAction(actionEvent -> closeWindow(canselButn));
     }
 
@@ -85,12 +100,14 @@ public class EditorController {
                 !header.isBlank() &&
                 !noteText.isEmpty() &&
                 header.length() >= 5 &&
-                noteText.length() >= 20) {
+                noteText.length() >= 5) {
             newNote = new Note(header, dateTime, noteText);
             closeWindow(okButn);
-            return DataStore.getNoteStore().add(newNote);
+            DataStore.getNoteStore().add(newNote);
+
+            return true;
         } else {
-            warning.setText("ВНИМАНИЕ: Заявка не была создана!");
+            Service.timedMessage(warning, 8, "ВНИМАНИЕ: Заявка не была создана!");
             return false;
         }
     }
@@ -115,14 +132,6 @@ public class EditorController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String currentTime = LocalDateTime.now().format(formatter);
         dateTime.setText(currentTime);
-    }
-
-    public TextField getHeader() {
-        return header;
-    }
-
-    public TextArea getNoteText() {
-        return noteText;
     }
 
     public void setHeader(String text) {

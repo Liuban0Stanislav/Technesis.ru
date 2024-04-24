@@ -1,38 +1,20 @@
 package org.lyuban.technesis.controllers;
 
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javafx.animation.FadeTransition;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.lyuban.technesis.DataBaceConnection.DataStore;
-import org.lyuban.technesis.HelloApplication;
+import org.lyuban.technesis.TechnesisApplication;
 import org.lyuban.technesis.service.Service;
 
-public class MainController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-    @FXML
-    private ScrollPane scrollPane;
+public class MainController{
 
     @FXML
     private Button addButton;
@@ -51,16 +33,14 @@ public class MainController {
 
     @FXML
     private VBox panelVBox;
-    @FXML
-    private Button noteButn;
 
     @FXML
     private Label windowHeader;
 
     @FXML
     private Label noteDelField;
-    private int selectedNoteIndex = -1;
 
+    private int selectedNoteIndex = -1;
 
 
     @FXML
@@ -73,6 +53,7 @@ public class MainController {
                 throw new RuntimeException(e);
             }
         });
+
         //Работа кнопки редактирования заявки
         updateButton.setOnAction(event -> {
             if (selectedNoteIndex == -1) {
@@ -92,13 +73,13 @@ public class MainController {
 
         //заполняю хранилище примерами заявок
         DataStore.addSomeNotes();
-        DataStore.addSomeNotes();
 
         //добавляем данные из хранилища на правую панель в виде списка
         addNotesToVbox();
 
         //выводим список заявок в консоль
         System.out.println("selectedNoteIndex = " + selectedNoteIndex);
+
     }
 
     /**
@@ -111,7 +92,7 @@ public class MainController {
      */
     private FXMLLoader showNewNoteWindow(String fxmlFileName,
                                     String titleName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        FXMLLoader fxmlLoader = new FXMLLoader(TechnesisApplication.class.getResource(fxmlFileName));
         Scene scene = new Scene(fxmlLoader.load(), 450, 320);
         Stage stage = new Stage();
         stage.setTitle(titleName);
@@ -143,45 +124,45 @@ public class MainController {
     /**
      * Метод выводит заголовки заявкок из хранилища в область {@link ScrollPane}
      */
-    private void addNotesToVbox() {
+    public void addNotesToVbox() {
         //очищаем все элементы VBox
         panelVBox.getChildren().clear();
         //получаю размер хранилища (количество заявок)
         int size = DataStore.getNoteStore().size();
         int counter = 0;
 
-        while (counter < size) {
-            //создаю кнопку
-            Button button = new Button(getNoteHeader(counter));
-            //устанавливаю обработчик событий на кнопку
-            int finalCounter = counter;
-            button.setOnAction(el -> {
-                selectedNoteIndex = Math.toIntExact(DataStore.getNoteStore().get(finalCounter).getId());
-                System.out.println("selectedNoteIndex = " + selectedNoteIndex);
-                setWindowHeader(finalCounter);
-                setNoteTime(finalCounter);
-                setNoteText(finalCounter);
-            });
-            //устанавливаю класс со стилями
-            button.getStyleClass().add("noteButton");
-            //создаю HBox
-            HBox hBox = new HBox();
-            //задаю центрирование дочерних элементов сверху и по центру
-            hBox.setAlignment(Pos.TOP_CENTER);
-            //задаю расширение кнопки в размер ширины VBox
-            HBox.setHgrow(button, Priority.ALWAYS);
-            //добавляю кнопку в HBox
-            hBox.getChildren().add(button);
-            //растягиваю кнопку на всю ширину HBox
-            button.setMaxWidth(Double.MAX_VALUE);
-            //задаю положение кнопки
-            hBox.setAlignment(Pos.TOP_CENTER);
-            //добавляю HBox на VBox
-            panelVBox.getChildren().add(hBox);
-            //задаю отступы между VBox
-            panelVBox.setSpacing(5);
+            while (counter < size) {
+                //создаю кнопку
+                Button button = new Button(getNoteHeader(counter));
+                //устанавливаю обработчик событий на кнопку
+                int finalCounter = counter;
+                button.setOnAction(el -> {
+                    selectedNoteIndex = Math.toIntExact(DataStore.getNoteStore().get(finalCounter).getId());
+                    System.out.println("selectedNoteIndex = " + selectedNoteIndex);
+                    setWindowHeader(finalCounter);
+                    setNoteTime(finalCounter);
+                    setNoteText(finalCounter);
+                });
+                //устанавливаю класс со стилями
+                button.getStyleClass().add("noteButton");
+                //создаю HBox
+                HBox hBox = new HBox();
+                //задаю центрирование дочерних элементов сверху и по центру
+                hBox.setAlignment(Pos.TOP_CENTER);
+                //задаю расширение кнопки в размер ширины VBox
+                HBox.setHgrow(button, Priority.ALWAYS);
+                //добавляю кнопку в HBox
+                hBox.getChildren().add(button);
+                //растягиваю кнопку на всю ширину HBox
+                button.setMaxWidth(Double.MAX_VALUE);
+                //задаю положение кнопки
+                hBox.setAlignment(Pos.TOP_CENTER);
+                //добавляю HBox на VBox
+                panelVBox.getChildren().add(hBox);
+                //задаю отступы между VBox
+                panelVBox.setSpacing(5);
 
-            counter++;
+                counter++;
         }
     }
 
@@ -197,27 +178,11 @@ public class MainController {
             noteCreationTime.setText("");
             noteText.setText("");
             this.selectedNoteIndex = -1;
+            addNotesToVbox();
             System.out.println(DataStore.getNoteStore());
         }
 
     }
-
-//    /**
-//     * Метод заставляет сообщение появиться и потом плавно затухать в течение определенного времени.
-//     * @param millis время затухания
-//     * @param messageText текст сообщения
-//     */
-//    private void timedMessage(Labeled label, int millis, String messageText){
-//        //устанавливаем прозрачность 100%
-//        label.setOpacity(1);
-//        //устанавливаем текст
-//        label.setText(messageText);
-//        //добавляем анимацию затухания
-//        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), label);
-//        fadeOut.setFromValue(1.0);
-//        fadeOut.setToValue(0.0);
-//        fadeOut.play();
-//    }
 
     /**
      * Метод устанавливает заголовок заметки в соответствующее поле.
